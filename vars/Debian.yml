@@ -1,0 +1,8 @@
+---
+os_codename: "{{ ansible_distribution_release }}"
+
+mysql_daemon: mysql
+mysql_package: percona-server-server-{{ mysql_version }}
+mysql_conf_file: /etc/mysql/my.cnf
+mysql_socket: /var/run/mysqld/mysqld.sock
+mysql_slow_query_log_file: /var/log/mysql/mysql-slow.log

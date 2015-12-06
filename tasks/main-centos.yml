@@ -1,0 +1,51 @@
+---
+- name: Enable nginx repo.
+  template:
+    src: nginx.repo.j2
+    dest: /etc/yum.repos.d/nginx.repo
+    owner: root
+    group: root
+    mode: 0644
+#  when: "{{ansible_distribution_version|int}} > 0"
+  tags:
+    - nginx
+
+- name: Debug nginx_use_service
+  debug: msg={{ nginx_use_service }}
+  tags:
+    - nginx
+
+- name: Ensure nginx is installed.
+  yum: pkg=nginx state=present enablerepo=nginx
+  tags:
+    - nginx
+
+- name: create document root directory if needed
+  file: path={{ nginx.document_root }} state=directory mode=0755
+  tags:
+    - nginx
+
+#- name: Starting nginx service
+#  service: name=nginx state=started
+#  tags:
+#    - nginx
+
+- name: copy nginx default conf
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  notify: restart nginx
+  tags:
+    - nginx
+
+- name: copy nginx default site
+  template: src=default.{{ nginx.php_engine }}.j2 dest={{ nginx.vhost_path }}
+  notify: restart nginx
+  tags:
+    - nginx
+
+
+
+- name: copy phpinfo
+  template: src=index.php.j2 dest={{ nginx.document_root }}index.php
+  notify: restart nginx
+  tags:
+    - nginx
