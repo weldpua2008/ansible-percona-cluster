@@ -1,0 +1,34 @@
+language: python
+python: '2.7'
+sudo: required
+env:
+  #matrix:
+
+  - OS_TYPE=centos OS_VERSION=6 ANSIBLE_VERSION=1.9.2
+  # dicabled due error: unpacking of archive failed on file /usr/sbin/suexec: cpio: cap_set_file
+  # See also: https://github.com/docker/docker/issues/6980
+  #- OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=1.9.2
+  - OS_TYPE=ubuntu OS_VERSION=12.04 ANSIBLE_VERSION=1.9.2
+  - OS_TYPE=ubuntu OS_VERSION=14.04 ANSIBLE_VERSION=1.9.2
+#  - OS_TYPE=fedora OS_VERSION=22
+
+branches:
+  only:
+  - master
+#  - stable
+
+services:
+  - docker
+
+before_install:
+  - docker pull weldpua2008/docker-ansible:${OS_TYPE}${OS_VERSION}_v${ANSIBLE_VERSION}
+
+script:
+ # Run tests in Container
+ - docker run --rm=true -v `pwd`:/ansible-percona-cluster:rw weldpua2008/docker-ansible:${OS_TYPE}${OS_VERSION}_v${ANSIBLE_VERSION} /bin/bash -c "/ansible-percona-cluster/tests/test-in-docker-image.sh ${OS_TYPE} ${OS_VERSION} ${ANSIBLE_VERSION}"
+
+notifications:
+  email: false
+#  hipchat:
+#    rooms:
+
