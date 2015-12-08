@@ -1,1 +1,14 @@
 ---
+# requires Ansible 1.6
+# requires gentoolkit on host
+
+- name: Install percona package
+  portage:
+    package={{ item }}
+    state=present
+  changed_when: false
+  with_items:
+    - dev-db/percona-server
+    - dev-db/percona
+  tags:
+    - percona

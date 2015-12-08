@@ -1,5 +1,5 @@
 ---
-- name: Enable nginx repo.
+- name: Enable the Percona repo.
   template:
     src: percona.repo.j2
     dest: /etc/yum.repos.d/percona.repo
@@ -10,8 +10,11 @@
   tags:
     - percona
 
-- name: copy the gpgkey key
+- name: copy the gpgkey key for the percona repo
   copy:
       src=../files/rpm-gpg/RPM-GPG-KEY-Percona
       dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-Percona
+  tags:
+    - percona
+
 
