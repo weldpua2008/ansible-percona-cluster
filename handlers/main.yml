@@ -1,5 +1,12 @@
 ---
 # handlers file for ansible-nginx
+- name: set root password
+  mysql_user: name={{mysql_root_username}} host={{ item }} password={{ mysql_root_password }}
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
+
 - name: restart percona
   action: service name={{ mysql_daemon }} state=restarted enabled=yes
   when: percona_use_service|bool

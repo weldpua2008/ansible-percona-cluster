@@ -1,0 +1,24 @@
+---
+- name: ensure databases exists
+  mysql_db:
+    name: "{{ item.name }}"
+    collation: "{{ item.collation | default('utf8_general_ci') }}"
+    encoding: "{{ item.encoding | default('utf8') }}"
+    login_user: "{{ item.login_user | default('root') }}"
+    login_password: "{{ item.login_password | default( {{mysql_root_password} }) }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: mysql_databases
+  when: item.name is defined and item.name != ""
+
+- name: ensure database users exists
+  mysql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password | default(item.name) }}"
+    host: "{{ item.host | default('localhost') }}"
+    priv: "{{ item.priv }}"
+    login_user: "{{ item.login_user | default('root') }}"
+    login_password:  "{{ item.login_password | default( {{mysql_root_password} }) }}"
+    login_port: "{{ item.login_user | default({{mysql_port}}) }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: percona_server_users
+  when: item.name is defined and item.name != ""

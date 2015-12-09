@@ -1,6 +1,6 @@
-# test file for pycharm
+# test file for ansible-percona-cluster
 ---
 - hosts: localhost
   remote_user: root
   roles:
-    - ansible-nginx
+    - ansible-percona-cluster

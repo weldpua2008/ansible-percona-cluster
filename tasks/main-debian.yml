@@ -3,19 +3,40 @@
   apt_key:
       keyserver=keys.gnupg.net
       id={{percona_apt_key}}
+      state=present
   tags:
     - percona
 
-- name: copy percona repo conf
-  template: src=percona.list.j2 dest=/etc/apt/sources.list.d/percona.list
-  tags:
-    - percona
+#- name: copy percona repo conf
+#  template: src=percona.list.j2 dest=/etc/apt/sources.list.d/percona.list
+#  tags:
+#    - percona
+- name: Add Percona repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+     - deb http://repo.percona.com/apt {{ ansible_distribution_release }} main
+#     - deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main
+
 
 - name: install percona packages
-  apt: pkg={{ item }} state=latest update_cache=yes cache_valid_time=86400
+  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=86400
   with_items:
-    - percona-server
-    - percona-server-tokudb
+    - percona-server-server-{{ mysql_version }}
+    - percona-server-client-{{ mysql_version }}
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  notify:
+    - set root password
   tags:
     - percona
+
+- meta: flush_handlers
+
+- name: mysqld is running
+  service: name=mysql state=started enabled=yes
+
+
 

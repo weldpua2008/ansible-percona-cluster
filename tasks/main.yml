@@ -7,4 +7,6 @@
 - include: main-centos.yml
   when: "ansible_os_family == 'RedHat'"
 - include: main-gentoo.yml
-  when: ansible_os_family == 'Gentoo '
+  when: "ansible_os_family == 'Gentoo'"
+
+- include: configure-database.yml
