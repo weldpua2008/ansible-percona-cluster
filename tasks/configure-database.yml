@@ -1,4 +1,17 @@
 ---
+
+- name: Deletes anonymous MySQL server user for ansible_fqdn
+  mysql_user:
+    user: ""
+    host: "{{ ansible_fqdn }}"
+    state: "absent"
+
+- name: Deletes anonymous MySQL server user for localhost
+  mysql_user:
+    user: ""
+    state: "absent"
+
+
 - name: ensure databases exists
   mysql_db:
     name: "{{ item.name }}"
@@ -22,3 +35,9 @@
     state: "{{ item.state | default('present') }}"
   with_items: percona_server_users
   when: item.name is defined and item.name != ""
+
+- name: Removes the MySQL test database
+  mysql_db:
+    db: test
+    state: absent
+  notify: restart percona

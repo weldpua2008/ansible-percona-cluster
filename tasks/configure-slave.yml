@@ -1,0 +1,17 @@
+---
+# Percona Slaves Setup
+
+- set_fact:
+    __percona_master_ip: "{{ hostvars[percona_master_host]['ansible_' + percona_bind_interface]['ipv4']['address'] }}"
+
+- name: Adds required replication users
+  mysql_user:
+    login_user: {{mysql_root_username}}
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ mysql_replication_user }}"
+    password: "{{ mysql_replication_password }}"
+    priv: "*.*:REPLICATION SLAVE"
+    host: "{{ hostvars[item]['ansible_' + percona_bind_interface]['ipv4']['address'] }}"
+  with_items:
+    - "{{ groups[percona_slaves_group] }}"
+  delegate_to: "{{ percona_master_host }}"
