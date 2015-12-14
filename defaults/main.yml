@@ -5,8 +5,12 @@ percona_apt_keyserver: "hkp://keys.gnupg.net:80"
 
 mysql_version: 5.6
 
-mysql_root_username: root
-mysql_root_password: password
+mysql_root_username: "root"
+mysql_root_password: "password"
+
+mysql_replication_user: "replication"
+mysql_replication_password: "mysql_replication_password"
+
 
 mysql_enabled_on_startup: yes
 

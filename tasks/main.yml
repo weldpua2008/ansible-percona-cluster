@@ -10,3 +10,5 @@
   when: "ansible_os_family == 'Gentoo'"
 
 - include: configure-database.yml
+
+- include: configure-slave.yml
