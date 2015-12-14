@@ -9,8 +9,8 @@
 
 - name: restart percona
   action: service name={{ mysql_daemon }} state=restarted enabled=yes
-  when: percona_use_service|bool
+  when: mysql_use_service|bool
 
 - name: reload percona
   action: service name={{ mysql_daemon }} state=reloaded
-  when: percona_use_service|bool
+  when: mysql_use_service|bool
