@@ -19,7 +19,9 @@
   with_items:
      - deb http://repo.percona.com/apt {{ ansible_distribution_release }} main
 #     - deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main
-#
+  tags:
+    - percona
+
 #- name: Sets root password
 #  debconf:
 #    name: "percona-server-server-{{ mysql_version }}"
@@ -52,10 +54,14 @@
   with_items:
     - percona-xtrabackup
     - percona-toolkit
-
+  tags:
+    - percona
 
 - meta: flush_handlers
+  tags:
+    - percona
 
 - name: mysqld is running
   service: name=mysql state=started enabled=yes
-
+  tags:
+    - percona

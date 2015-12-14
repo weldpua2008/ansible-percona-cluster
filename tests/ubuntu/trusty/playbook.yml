@@ -2,7 +2,5 @@
   hosts: all
   sudo: yes
   gather_facts: true
-  vars:
-    freebsd_install_from_ports: True
   roles:
     - ansible-percona-cluster

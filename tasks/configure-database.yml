@@ -1,15 +1,28 @@
 ---
+- name: Configures for easy access as root user
+  template:
+    src: "root_my.cnf.j2"
+    dest: /root/.my.cnf
+    mode: 0600
+  tags:
+    - percona
+    - percona-configure
 
 - name: Deletes anonymous MySQL server user for ansible_fqdn
   mysql_user:
     user: ""
     host: "{{ ansible_fqdn }}"
     state: "absent"
+  tags:
+    - percona-configure
+
 
 - name: Deletes anonymous MySQL server user for localhost
   mysql_user:
     user: ""
     state: "absent"
+  tags:
+    - percona-configure
 
 
 - name: ensure databases exists
@@ -22,6 +35,8 @@
     state: "{{ item.state | default('present') }}"
   with_items: mysql_databases
   when: item.name is defined and item.name != ""
+  tags:
+    - percona-configure
 
 - name: ensure database users exists
   mysql_user:
@@ -35,9 +50,13 @@
     state: "{{ item.state | default('present') }}"
   with_items: percona_server_users
   when: item.name is defined and item.name != ""
+  tags:
+    - percona-configure
 
 - name: Removes the MySQL test database
   mysql_db:
     db: test
     state: absent
   notify: restart percona
+  tags:
+    - percona-configure
