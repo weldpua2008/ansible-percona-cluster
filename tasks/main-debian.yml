@@ -1,8 +1,8 @@
 ---
 - name: Add Percona repo key to system
   apt_key:
-      keyserver={{percona_apt_keyserver}}
-      id={{percona_apt_key}}
+      keyserver="{{percona_apt_keyserver}}"
+      id="{{percona_apt_key}}"
       state=present
   tags:
     - percona
