@@ -1,5 +1,7 @@
 ---
 percona_apt_key: "1C4CBDCDCD2EFD2A"
+percona_apt_keyserver: "hkp://keys.gnupg.net:80"
+
 
 mysql_version: 5.6
 

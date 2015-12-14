@@ -1,7 +1,7 @@
 ---
 - name: Add Percona repo key to system
   apt_key:
-      keyserver=keys.gnupg.net
+      keyserver={{percona_apt_keyserver}}
       id={{percona_apt_key}}
       state=present
   tags:
@@ -26,6 +26,7 @@
   with_items:
     - percona-server-server-{{ mysql_version }}
     - percona-server-client-{{ mysql_version }}
+    - python-mysqldb
   environment:
     DEBIAN_FRONTEND: noninteractive
   notify:
